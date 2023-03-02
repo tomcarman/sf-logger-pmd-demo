@@ -30,10 +30,10 @@ workflows:
   validate-dev-org:
     jobs:
       - validate
-  deploy-dev-org:
-    jobs:
-      - deploy:
-          filters:
-            branches:
-              only:
-                - dev
+  # deploy-dev-org:
+  #   jobs:
+  #     - deploy:
+  #         filters:
+  #           branches:
+  #             only:
+  #               - dev
