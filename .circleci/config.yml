@@ -29,11 +29,11 @@ jobs:
 workflows:
   validate-dev-org:
     jobs:
-      - validate:
-          filters:
-            branches:
-              only:
-                - dev
+      - validate
+          # filters:
+          #   branches:
+          #     only:
+          #       - dev
   # deploy-dev-org:
   #   jobs:
   #     - deploy:
