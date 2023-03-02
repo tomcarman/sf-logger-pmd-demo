@@ -1,0 +1,43 @@
+version: 2.1
+orbs:
+  salesforce-sfdx: circleci/salesforce-sfdx@2.2.0
+jobs:
+  validate:
+    executor: sfdx/default
+    steps:
+      - checkout
+      - sfdx/install
+      - run:
+          name: Login to Org
+          command: . build/auth.sh
+      - run:
+          name: Validate to Org
+          no_output_timeout: 60m
+          command: . build/validate.sh
+  deploy:
+    executor: sfdx/default
+    steps:
+      - checkout
+      - sfdx/install
+      - run:
+          name: Login to Org
+          command: . build/auth.sh
+      - run:
+          name: Deploy to Org
+          no_output_timeout: 60m
+          command: . build/deploy.sh
+workflows:
+  validate-dev-org:
+    jobs:
+      - validate-ci:
+        filters:
+            branches:
+              only:
+                - dev
+  deploy-dev-org:
+    jobs:
+      - deploy:
+          filters:
+            branches:
+              only:
+                - dev
