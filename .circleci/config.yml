@@ -29,7 +29,7 @@ jobs:
 workflows:
   validate-dev-org:
     jobs:
-      - validate-ci:
+      - validate:
   deploy-dev-org:
     jobs:
       - deploy:
