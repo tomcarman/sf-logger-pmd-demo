@@ -4,9 +4,9 @@ orbs:
   sfdx: circleci/salesforce-sfdx@2.2.0
 
 parameters:
- is_pr:
-     description: Whether its a PR
-     type: boolean
+  is_pr:
+    type: boolean
+    default: false
 
 jobs:
   validate:
