@@ -31,7 +31,7 @@ jobs:
 
 workflows:
   validate-dev-org:
-    when: <<pipeline.parameters.is_pr >>
+    when: << pipeline.parameters.is_pr >>
     jobs:
       - validate
   deploy-dev-org:
