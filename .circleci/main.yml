@@ -30,6 +30,7 @@ jobs:
           command: . build/deploy.sh
 
 workflows:
+  version: 2
   validate-dev-org:
     when: << pipeline.parameters.is_pr >>
     jobs:
