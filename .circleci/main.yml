@@ -1,6 +1,8 @@
 version: 2.1
+
 orbs:
   sfdx: circleci/salesforce-sfdx@2.2.0
+
 jobs:
   validate:
     executor: sfdx/default
@@ -26,8 +28,10 @@ jobs:
           name: Deploy to Org
           no_output_timeout: 60m
           command: . build/deploy.sh
+
 workflows:
   validate-dev-org:
+    when: <<pipeline.parameters.is_pr >>
     jobs:
       - validate
   deploy-dev-org:
