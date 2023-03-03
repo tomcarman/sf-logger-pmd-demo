@@ -11,6 +11,8 @@ workflows:
           pre-steps:
             - run:
                 command: |
+                  echo '${CIRCLE_PULL_REQUEST##*/}' ${CIRCLE_PULL_REQUEST##*/}
+                  echo '${CIRCLE_PULL_REQUEST}' ${CIRCLE_PULL_REQUEST}
                   if [ -z "${CIRCLE_PULL_REQUEST##*/}" ]
                   then
                     IS_PR=false
