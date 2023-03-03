@@ -7,7 +7,6 @@ parameters:
  is_pr:
      description: Whether its a PR
      type: boolean
-     default: false
 
 jobs:
   validate:
