@@ -96,7 +96,7 @@ Logger.get().publish();
 
 # Sources
 
-This project is heavily inspired by the following -- 
+This project is heavily inspired by the following - 
 
 * The recent [blog post](https://developer.salesforce.com/blogs/2020/12/codelive-log-you-some-events-for-great-good.html) and [CodeLive](https://www.youtube.com/watch?v=m5l7PkaG6h0) by [@codefriar](https://github.com/codefriar) and [@ca_peterson](https://twitter.com/ca_peterson)
  * A [demo of a similar topic](https://www.youtube.com/watch?v=yYeurYnasVc) by [@afawcett](https://github.com/afawcett)
