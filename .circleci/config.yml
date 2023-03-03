@@ -1,39 +1,22 @@
+setup: true
 version: 2.1
 orbs:
-  sfdx: circleci/salesforce-sfdx@2.2.0
-jobs:
-  validate:
-    executor: sfdx/default
-    steps:
-      - checkout
-      - sfdx/install
-      - run:
-          name: Login to Org
-          command: . build/auth.sh
-      - run:
-          name: Validate to Org
-          no_output_timeout: 60m
-          command: . build/validate.sh
-  deploy:
-    executor: sfdx/default
-    steps:
-      - checkout
-      - sfdx/install
-      - run:
-          name: Login to Org
-          command: . build/auth.sh
-      - run:
-          name: Deploy to Org
-          no_output_timeout: 60m
-          command: . build/deploy.sh
+  continuation: circleci/continuation@0.2.0
 workflows:
-  validate-dev-org:
+  setup:
     jobs:
-      - validate
-  deploy-dev-org:
-    jobs:
-      - deploy:
-          filters:
-            branches:
-              only:
-                - dev
+      - continuation/continue:
+          configuration_path: ".circleci/main.yml"
+          parameters: /home/circleci/params.json
+          pre-steps:
+            - run:
+                command: |
+                  echo '${CIRCLE_PULL_REQUEST##*/}' ${CIRCLE_PULL_REQUEST##*/}
+                  echo '${CIRCLE_PULL_REQUEST}' ${CIRCLE_PULL_REQUEST}
+                  if [ -z "${CIRCLE_PULL_REQUEST##*/}" ]
+                  then
+                    IS_PR=false
+                  else
+                    IS_PR=true
+                  fi
+                  echo '{ "is_pr": '$IS_PR' }' >> /home/circleci/params.json
