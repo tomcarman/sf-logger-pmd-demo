@@ -60,7 +60,7 @@ sfdx force:org:open -u logger-demo
 * Deploy metadata using your normal methods
 
 
-# Usage
+# Usage x
 
 ```
 // Create & immediately publish a simple log
