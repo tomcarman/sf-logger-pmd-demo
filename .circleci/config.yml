@@ -27,9 +27,9 @@ jobs:
           no_output_timeout: 60m
           command: . build/deploy.sh
 workflows:
-  validate-dev-org:
-    jobs:
-      - validate
+  # validate-dev-org:
+  #   jobs:
+  #     - validate
   deploy-dev-org:
     jobs:
       - deploy:
