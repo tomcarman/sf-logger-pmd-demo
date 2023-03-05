@@ -59,7 +59,6 @@ workflows:
   validate-dev-org:
     when: << pipeline.parameters.is_pr >>
     jobs:
-      - install-node
       - static-analysis
       - validate
   deploy-dev-org:
