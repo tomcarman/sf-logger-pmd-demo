@@ -2,7 +2,7 @@ version: 2.1
 
 orbs:
   sfdx: circleci/salesforce-sfdx@2.2.0
-  node: circleci/node@5.1.0
+  # node: circleci/node@5.1.0
 
 parameters:
   is_pr:
@@ -15,7 +15,8 @@ jobs:
     executor: sfdx/default
     steps:
       - checkout
-      - sfdx/install
+      - sfdx/install:
+          version: latest
       - run:
           name: Login to Org
           command: . build/auth.sh
@@ -42,17 +43,8 @@ jobs:
     # docker:
     #   - image: 'cimg/base:stable'
     steps:
-      # - node/install:
-      #     install-yarn: true
-      #     node-version: '16.13'
       - checkout
       - sfdx/install
-      - run: 
-          name: Update node
-          command: nvm install 18.14.2
-      - run:
-          name: Set node version
-          command: nvm use 18.14.2
       - run:
           name: Install sfdx-scanner
           command: sfdx plugins:install @salesforce/sfdx-scanner
