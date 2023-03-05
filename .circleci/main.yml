@@ -33,12 +33,24 @@ jobs:
           name: Deploy to Org
           no_output_timeout: 60m
           command: . build/deploy.sh
+  static-analysis:
+    executor: sfdx/default
+    steps:
+      - checkout
+      - sfdx/install
+      - run:
+          name: Install sfdx-scanner
+          command: sfdx plugins:install @salesforce/sfdx-scanner
+      - run: 
+          name: Run sfdx-scanner static analysis with default settings
+          command: sfdx scanner:run -f table -t .
 
 workflows:
   version: 2
   validate-dev-org:
     when: << pipeline.parameters.is_pr >>
     jobs:
+      - static-analysis
       - validate
   deploy-dev-org:
     jobs:
