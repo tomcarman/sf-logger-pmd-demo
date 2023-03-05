@@ -5,7 +5,7 @@ orbs:
 workflows:
   setup:
     jobs:
-      - continuation/continue:
+      - continuation/setup:
           configuration_path: ".circleci/main.yml"
           parameters: /home/circleci/params.json
           pre-steps:
