@@ -2,6 +2,7 @@ version: 2.1
 
 orbs:
   sfdx: circleci/salesforce-sfdx@2.2.0
+  node: circleci/node@5.1.0
 
 parameters:
   is_pr:
@@ -9,6 +10,7 @@ parameters:
     default: false
 
 jobs:
+  
   validate:
     executor: sfdx/default
     steps:
@@ -21,6 +23,7 @@ jobs:
           name: Validate to Org
           no_output_timeout: 60m
           command: . build/validate.sh
+  
   deploy:
     executor: sfdx/default
     steps:
@@ -33,9 +36,15 @@ jobs:
           name: Deploy to Org
           no_output_timeout: 60m
           command: . build/deploy.sh
+
   static-analysis:
     executor: sfdx/default
+    docker:
+      - image: 'cimg/base:stable'
     steps:
+      - node/install:
+        install-yarn: true
+        node-version: '16.13'
       - checkout
       - sfdx/install
       - run:
@@ -50,6 +59,7 @@ workflows:
   validate-dev-org:
     when: << pipeline.parameters.is_pr >>
     jobs:
+      - install-node
       - static-analysis
       - validate
   deploy-dev-org:
