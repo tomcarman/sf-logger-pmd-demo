@@ -1,15 +1,12 @@
+---
 version: 2.1
-
 orbs:
   sfdx: circleci/salesforce-sfdx@2.2.0
-
 parameters:
   is_pr:
     type: boolean
     default: false
-
 jobs:
-  
   validate:
     executor: sfdx/default
     steps:
@@ -23,7 +20,6 @@ jobs:
           name: Validate to Org
           no_output_timeout: 60m
           command: . build/validate.sh
-  
   deploy:
     executor: sfdx/default
     steps:
@@ -36,7 +32,6 @@ jobs:
           name: Deploy to Org
           no_output_timeout: 60m
           command: . build/deploy.sh
-
   static-analysis:
     executor: sfdx/default
     steps:
@@ -48,17 +43,16 @@ jobs:
       - run:
           name: Install sfdx-scanner
           command: sfdx plugins:install @salesforce/sfdx-scanner
-      - run: 
+      - run:
           name: Run sfdx-scanner static analysis with default settings
           command: sfdx scanner:run -f table -t .
-
 workflows:
   version: 2
   validate-dev-org:
     when: << pipeline.parameters.is_pr >>
     jobs:
       - static-analysis
-      - validate:
+      - validate: null
         requires:
           - static-analysis
   deploy-dev-org:
