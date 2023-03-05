@@ -37,7 +37,7 @@ jobs:
     executor: sfdx/default
     steps:
       - checkout
-      - sfx/install
+      - sfdx/install
       - run:
           name: Install sfdx-scanner
           command: sfdx plugins:install @salesforce/sfdx-scanner
