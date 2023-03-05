@@ -43,8 +43,8 @@ jobs:
       - image: 'cimg/base:stable'
     steps:
       - node/install:
-        install-yarn: true
-        node-version: '16.13'
+          install-yarn: true
+          node-version: '16.13'
       - checkout
       - sfdx/install
       - run:
