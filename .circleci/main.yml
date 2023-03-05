@@ -39,14 +39,20 @@ jobs:
 
   static-analysis:
     executor: sfdx/default
-    docker:
-      - image: 'cimg/base:stable'
+    # docker:
+    #   - image: 'cimg/base:stable'
     steps:
-      - node/install:
-          install-yarn: true
-          node-version: '16.13'
+      # - node/install:
+      #     install-yarn: true
+      #     node-version: '16.13'
       - checkout
       - sfdx/install
+      - run: 
+          name: Update node
+          command: nvm install 18.14.2
+      - run:
+          name: Set node version
+          command: nvm use 18.14.2
       - run:
           name: Install sfdx-scanner
           command: sfdx plugins:install @salesforce/sfdx-scanner
