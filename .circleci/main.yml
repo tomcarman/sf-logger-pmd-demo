@@ -50,7 +50,7 @@ jobs:
           command: sfdx plugins:install @salesforce/sfdx-scanner
       - run:
           name: Run sfdx-scanner static analysis with default settings
-          command: sfdx scanner:run -f table -t .
+          command: sfdx scanner:run -f table -t force-app/ --severity-threshold 0
 workflows:
   version: 2
   validate-dev-org:
