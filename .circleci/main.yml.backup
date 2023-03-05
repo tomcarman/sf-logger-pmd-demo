@@ -2,6 +2,7 @@ version: 2.1
 
 orbs:
   sfdx: circleci/salesforce-sfdx@2.2.0
+  # node: circleci/node@5.1.0
 
 parameters:
   is_pr:
@@ -39,12 +40,11 @@ jobs:
 
   static-analysis:
     executor: sfdx/default
+    # docker:
+    #   - image: 'cimg/base:stable'
     steps:
       - checkout
       - sfdx/install
-      - run:
-          name: debug
-          command: node --version
       - run:
           name: Install sfdx-scanner
           command: sfdx plugins:install @salesforce/sfdx-scanner
@@ -58,9 +58,7 @@ workflows:
     when: << pipeline.parameters.is_pr >>
     jobs:
       - static-analysis
-      - validate:
-        requires:
-          - static-analysis
+      - validate
   deploy-dev-org:
     jobs:
       - deploy:
