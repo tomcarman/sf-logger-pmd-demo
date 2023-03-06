@@ -38,7 +38,7 @@ jobs:
     steps:
       - checkout
       - run:
-          name: Install SFDX from source
+          name: Install sfdx
           command: |
             mkdir sfdx
             wget https://developer.salesforce.com/media/salesforce-cli/sfdx/channels/stable/sfdx-linux-x64.tar.xz
@@ -46,11 +46,22 @@ jobs:
             echo 'export PATH=./sfdx/bin/:$PATH' >> $BASH_ENV
             source $BASH_ENV
       - run:
+          name: Install sfdx-git-delta
+          command: |
+            mkdir $HOME/.config/sfdx
+            echo '[ "sfdx-git-delta" ]' > $HOME/.config/sfdx/unsignedPluginAllowList.json
+            sfdx plugins:install sfdx-git-delta
+      - run:
+          name: Generate delta package
+          command: |
+            mkdir delta-package
+            sfdx sgd:source:delta --to "HEAD" --from "origin/development" --output delta-package
+      - run:
           name: Install sfdx-scanner
           command: sfdx plugins:install @salesforce/sfdx-scanner
       - run:
           name: Run sfdx-scanner static analysis with default settings
-          command: sfdx scanner:run --format table --target force-app/ --normalize-severity --severity-threshold 3
+          command: sfdx scanner:run --format table --target delta-package/force-app/ --normalize-severity --severity-threshold 3
 workflows:
   version: 2
   validate-dev-org:
