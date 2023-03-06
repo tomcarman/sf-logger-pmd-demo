@@ -37,6 +37,11 @@ jobs:
       - image: cimg/openjdk:19.0.2
     steps:
       - checkout
+      - run: 
+          name: Is python installed?
+          command: |
+          echo 'python --version' python --version
+          echo 'python3 --version' python3 --version
       - run:
           name: Install sfdx
           command: |
