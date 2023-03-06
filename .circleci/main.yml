@@ -52,13 +52,15 @@ jobs:
             echo '[ "sfdx-git-delta" ]' > $HOME/.config/sfdx/unsignedPluginAllowList.json
             sfdx plugins:install sfdx-git-delta
       - run:
+          name: Install sfdx-scanner
+          command: sfdx plugins:install @salesforce/sfdx-scanner
+      - run:
           name: Generate delta package
           command: |
             mkdir delta-package
             sfdx sgd:source:delta --to "HEAD" --from "origin/dev" --output delta-package
-      - run:
-          name: Install sfdx-scanner
-          command: sfdx plugins:install @salesforce/sfdx-scanner
+            echo "The following files were identified as changed:"
+            ls -lR
       - run:
           name: Run sfdx-scanner static analysis with default settings
           command: sfdx scanner:run --format table --target delta-package/force-app/ --normalize-severity --severity-threshold 3
