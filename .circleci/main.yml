@@ -58,9 +58,9 @@ jobs:
           name: Generate delta package
           command: |
             mkdir delta-package
-            sfdx sgd:source:delta --to "HEAD" --from "origin/dev" --output delta-package
+            sfdx sgd:source:delta --to "HEAD" --from "origin/dev" --output delta-package --generate-delta
             echo "The following files were identified as changed:"
-            cat ./delta-package/package/package.xml
+            ls -lR delta-package/force-app
       - run:
           name: Run sfdx-scanner static analysis with default settings
           command: sfdx scanner:run --format table --target delta-package/force-app/ --normalize-severity --severity-threshold 3
