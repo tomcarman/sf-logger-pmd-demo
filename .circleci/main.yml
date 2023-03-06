@@ -40,8 +40,8 @@ jobs:
       - run: 
           name: Is python installed?
           command: |
-          echo 'python --version' python --version
-          echo 'python3 --version' python3 --version
+            echo 'python --version' python --version
+            echo 'python3 --version' python3 --version
       - run:
           name: Install sfdx
           command: |
