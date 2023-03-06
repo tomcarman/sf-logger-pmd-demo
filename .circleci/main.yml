@@ -55,7 +55,7 @@ jobs:
           name: Generate delta package
           command: |
             mkdir delta-package
-            sfdx sgd:source:delta --to "HEAD" --from "origin/development" --output delta-package
+            sfdx sgd:source:delta --to "HEAD" --from "origin/dev" --output delta-package
       - run:
           name: Install sfdx-scanner
           command: sfdx plugins:install @salesforce/sfdx-scanner
