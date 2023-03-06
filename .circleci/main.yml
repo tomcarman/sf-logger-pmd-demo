@@ -48,7 +48,7 @@ jobs:
       - run:
           name: Install sfdx-git-delta
           command: |
-            mkdir $HOME/.config/sfdx
+            mkdir -p $HOME/.config/sfdx
             echo '[ "sfdx-git-delta" ]' > $HOME/.config/sfdx/unsignedPluginAllowList.json
             sfdx plugins:install sfdx-git-delta
       - run:
