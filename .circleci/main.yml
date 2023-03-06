@@ -60,7 +60,7 @@ jobs:
             mkdir delta-package
             sfdx sgd:source:delta --to "HEAD" --from "origin/dev" --output delta-package
             echo "The following files were identified as changed:"
-            ls -lR delta-package
+            cat ./delta-package/package/package.xml
       - run:
           name: Run sfdx-scanner static analysis with default settings
           command: sfdx scanner:run --format table --target delta-package/force-app/ --normalize-severity --severity-threshold 3
