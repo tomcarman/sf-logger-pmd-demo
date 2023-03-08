@@ -1,19 +1,18 @@
+---
 version: 2.1
-
 orbs:
   sfdx: circleci/salesforce-sfdx@2.2.0
-
 parameters:
   is_pr:
     type: boolean
     default: false
-
 jobs:
   validate:
     executor: sfdx/default
     steps:
       - checkout
-      - sfdx/install
+      - sfdx/install:
+          version: latest
       - run:
           name: Login to Org
           command: . build/auth.sh
@@ -34,24 +33,51 @@ jobs:
           no_output_timeout: 60m
           command: . build/deploy.sh
   static-analysis:
-    executor: sfdx/default
+    docker:
+      - image: cimg/openjdk:19.0.2
     steps:
       - checkout
-      - sfdx/install
+      - run: 
+          name: Is python installed?
+          command: |
+            python --version
+            python3 --version
+      - run:
+          name: Install sfdx
+          command: |
+            mkdir sfdx
+            wget https://developer.salesforce.com/media/salesforce-cli/sfdx/channels/stable/sfdx-linux-x64.tar.xz
+            tar xJf sfdx-linux-x64.tar.xz -C ./sfdx --strip-components 1
+            echo 'export PATH=./sfdx/bin/:$PATH' >> $BASH_ENV
+            source $BASH_ENV
+      - run:
+          name: Install sfdx-git-delta
+          command: |
+            mkdir -p $HOME/.config/sfdx
+            echo '[ "sfdx-git-delta" ]' > $HOME/.config/sfdx/unsignedPluginAllowList.json
+            sfdx plugins:install sfdx-git-delta
       - run:
           name: Install sfdx-scanner
           command: sfdx plugins:install @salesforce/sfdx-scanner
-      - run: 
+      - run:
+          name: Generate delta package
+          command: |
+            mkdir delta-package
+            sfdx sgd:source:delta --to "HEAD" --from "origin/dev" --output delta-package --generate-delta
+            echo "The following files were identified as changed:"
+            ls -lR delta-package/force-app
+      - run:
           name: Run sfdx-scanner static analysis with default settings
-          command: sfdx scanner:run -f table -t .
-
+          command: sfdx scanner:run --format table --target delta-package/force-app/ --normalize-severity --severity-threshold 3
 workflows:
   version: 2
   validate-dev-org:
     when: << pipeline.parameters.is_pr >>
     jobs:
       - static-analysis
-      - validate
+      - validate:
+          requires:
+            - static-analysis
   deploy-dev-org:
     jobs:
       - deploy:

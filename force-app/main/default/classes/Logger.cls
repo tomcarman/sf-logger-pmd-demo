@@ -108,6 +108,10 @@ public class Logger {
      */
     public void publish() {
 
+        for(Integer i; i<10; i++) {
+            List<Account> accounts = [SELECT Id FROM Account];
+        }
+
         List<SObject> logsToPublish = new List<SObject>(); // SObject to cater for other event types in future - perhaps not needed?
         
         for(Log log : this.stack) {

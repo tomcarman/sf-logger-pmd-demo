@@ -1,0 +1,68 @@
+version: 2.1
+
+orbs:
+  sfdx: circleci/salesforce-sfdx@2.2.0
+  # node: circleci/node@5.1.0
+
+parameters:
+  is_pr:
+    type: boolean
+    default: false
+
+jobs:
+  
+  validate:
+    executor: sfdx/default
+    steps:
+      - checkout
+      - sfdx/install:
+          version: latest
+      - run:
+          name: Login to Org
+          command: . build/auth.sh
+      - run:
+          name: Validate to Org
+          no_output_timeout: 60m
+          command: . build/validate.sh
+  
+  deploy:
+    executor: sfdx/default
+    steps:
+      - checkout
+      - sfdx/install
+      - run:
+          name: Login to Org
+          command: . build/auth.sh
+      - run:
+          name: Deploy to Org
+          no_output_timeout: 60m
+          command: . build/deploy.sh
+
+  static-analysis:
+    executor: sfdx/default
+    # docker:
+    #   - image: 'cimg/base:stable'
+    steps:
+      - checkout
+      - sfdx/install
+      - run:
+          name: Install sfdx-scanner
+          command: sfdx plugins:install @salesforce/sfdx-scanner
+      - run: 
+          name: Run sfdx-scanner static analysis with default settings
+          command: sfdx scanner:run -f table -t .
+
+workflows:
+  version: 2
+  validate-dev-org:
+    when: << pipeline.parameters.is_pr >>
+    jobs:
+      - static-analysis
+      - validate
+  deploy-dev-org:
+    jobs:
+      - deploy:
+          filters:
+            branches:
+              only:
+                - dev
